@@ -24,7 +24,7 @@ def search(field, value):
     oby = request.args.get("order_by", "id")
     order = request.args.get("order", "asc")
     if field=='tag' :
-       stat="select s.id, s.name, s.bought, s.sold, a.name from pet s ,animal a, tag t ,tags_pets tb where t.name=? and t.id=tb.tag and s.id=tb.pet and s.species=a.id"
+       stat="select s.id, s.name, s.bought, s.sold, a.name from pet s ,animal a, tag t ,tags_pets tb where t.name=? and t.id=tb.tag and s.id=tb.pet and s.species=a.id ;"
        cursor.execute(stat,(value,))
     pets=cursor.fetchall()
     order='asc'
@@ -39,9 +39,9 @@ def dashboard():
     oby = request.args.get("order_by", "id") # TODO. This is currently not used. 
     order = request.args.get("order", "asc")
     if order == "asc":
-        cursor.execute(f"select p.id, p.name, p.bought, p.sold, s.name from pet p, animal s where p.species = s.id order by p.id")
+        cursor.execute(f"select p.id, p.name, p.bought, p.sold, s.name from pet p, animal s where p.species = s.id order by p.{oby}")
     else:
-        cursor.execute(f"select p.id, p.name, p.bought, p.sold, s.name from pet p, animal s where p.species = s.id order by p.id desc")
+        cursor.execute(f"select p.id, p.name, p.bought, p.sold, s.name from pet p, animal s where p.species = s.id order by p.{oby} desc")
     pets = cursor.fetchall()
     return render_template('index.html', pets = pets, order="desc" if order=="asc" else "asc")
 
