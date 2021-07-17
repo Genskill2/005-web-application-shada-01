@@ -84,10 +84,11 @@ def edit(pid):
         return render_template("editpet.html", **data)
     elif request.method == "POST":
         description = request.form.get('description')
-        sold = request.form.get("sold")
-        sold=datetime.date.today()
+        if request.form.get("sold"):
+              sold=datetime.date.today()
+              cursor.execute("update pet set sold=? where id=?;",(sold,pid))
         cursor.execute("update pet set description=? where id=?;",(description,pid))
-        cursor.execute("update pet set sold=? where id=?;",(sold,pid))
+        
         conn.commit()
         # TODO Handle sold
        
